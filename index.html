@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TravelDesk — Réservations partagées</title>
+<title>Matsport Travel</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -102,8 +102,8 @@ body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-s
 .day-dot{width:5px;height:5px;border-radius:50%;background:var(--blue)}
 .cal-event{padding:.2rem .45rem;border-radius:3px;font-size:.62rem;font-weight:500;margin-bottom:.2rem;cursor:pointer;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;transition:filter .15s;line-height:1.5}
 .cal-event:hover{filter:brightness(1.2)}
-.cal-event.transport{background:var(--blue-dim);color:#1d4ed8;border-left:2px solid var(--blue)}
-.cal-event.logement{background:var(--purple-dim);color:#6d28d9;border-left:2px solid var(--purple)}
+.cal-event.transport{background:var(--orange-dim);color:#c2410c;border-left:2px solid var(--orange)}
+.cal-event.logement{background:var(--blue-dim);color:#1d4ed8;border-left:2px solid var(--blue)}
 .more-events{font-size:.6rem;color:var(--muted);padding:.1rem .3rem;cursor:pointer}
 .more-events:hover{color:var(--text)}
 .cal-legend{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
@@ -143,6 +143,12 @@ select option{background:#fff}
 .type-btn.sel{background:var(--blue-dim);color:#1d4ed8;border-color:var(--blue)}
 .form-err{color:var(--red);font-size:.72rem;margin-top:.6rem;display:none}
 
+/* Tags */
+.collab-tag{display:inline-flex;align-items:center;gap:.3rem;background:var(--blue-dim);color:#1d4ed8;border-radius:4px;padding:.18rem .5rem;font-size:.72rem;font-weight:500;white-space:nowrap}
+.collab-tag button{background:none;border:none;color:#1d4ed8;cursor:pointer;font-size:.8rem;line-height:1;padding:0 .1rem;opacity:.6}.collab-tag button:hover{opacity:1}
+
+
+
 /* Detail modal */
 .detail-row{display:flex;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
 .detail-row:last-child{border-bottom:none}
@@ -150,114 +156,71 @@ select option{background:#fff}
 .detail-value{font-size:.82rem;line-height:1.5}
 
 @media(max-width:800px){
-  .list-view{grid-template-columns:1fr}.sidebar{display:none}
-  .stats-row{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}
-  .table-head,.trow{grid-template-columns:1.5fr 1fr auto!important}
-  .trow > *:nth-child(3),.trow > *:nth-child(4),.table-head > *:nth-child(3),.table-head > *:nth-child(4){display:none}
-  .cal-cell{min-height:70px}
+  /* Layout */
+  .list-view{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+  .fg.full{grid-column:1/-1}
+
+  /* Topbar */
+  .topbar{padding:.6rem 1rem;flex-wrap:wrap;gap:.5rem}
+  .topbar-center{order:3;width:100%}
+  .tab-btn{flex:1;justify-content:center;padding:.5rem}
+  .topbar-right{gap:.4rem}
+  .sync-indicator span{display:none}
+  .btn-primary{font-size:.72rem;padding:.4rem .7rem}
+
+  /* Table responsive */
+  .table-head{grid-template-columns:1.5fr 1fr auto!important;padding:.5rem .75rem}
+  .trow{grid-template-columns:1.5fr 1fr auto!important;padding:.6rem .75rem}
+  .trow > *:nth-child(3),.trow > *:nth-child(4),.trow > *:nth-child(5),
+  .table-head > *:nth-child(3),.table-head > *:nth-child(4),.table-head > *:nth-child(5){display:none}
+
+  /* Section bar */
+  .section-bar{flex-direction:column;align-items:flex-start;gap:.6rem}
+  .section-bar > div:last-child{width:100%;flex-direction:column}
+  #searchInput{width:100%!important}
+  .filter-row{width:100%;justify-content:flex-start}
+
+  /* Calendar */
+  .cal-cell{min-height:60px;padding:.3rem}
+  .cal-event{font-size:.56rem;padding:.15rem .3rem}
+  .cal-header{flex-direction:column;align-items:flex-start}
+  .cal-legend{gap:.6rem}
+
+  /* Modal */
+  .modal{max-height:95vh;border-radius:14px 14px 0 0;margin-top:auto}
+  .overlay{align-items:flex-end;padding:0}
+  .modal-bd{padding:1rem}
+  .modal-hd{padding:1rem 1rem .8rem}
+  .modal-ft{padding:.8rem 1rem;gap:.5rem}
+  .modal-ft .btn{flex:1;text-align:center}
+  .type-toggle{gap:.4rem}
+  .type-btn{padding:.55rem .4rem;font-size:.75rem}
+
+  /* Stats */
+  .stat-card{padding:.8rem 1rem}
+  .stat-value{font-size:1.4rem}
+  .list-content{padding:1rem}
+  .stats-row{gap:.6rem;margin-bottom:1rem}
 }
 
-  /* =====================================================
-   RESPONSIVE MOBILE & TEAMS (AJOUT)
-   ===================================================== */
-
-/* ✅ 1. Ne pas bloquer le scroll (Teams iframe friendly) */
-html, body {
-  height: auto;
+@media(max-width:420px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stat-card{padding:.65rem .8rem}
+  .stat-value{font-size:1.25rem}
+  .topbar .logo{font-size:.9rem}
+  .cell-actions{gap:.2rem}
+  .btn-icon{padding:.35rem .4rem;font-size:.75rem}
 }
-
-/* ✅ 2. Topbar mobile */
-@media (max-width: 600px) {
-  .topbar {
-    flex-wrap: wrap;
-    padding: .6rem .8rem;
-    gap: .5rem;
-  }
-
-  .topbar-center {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .topbar-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .tab-btn {
-    flex: 1;
-    justify-content: center;
-  }
-}
-
-/* ✅ 3. Zones tactiles (mobile) */
-@media (pointer: coarse) {
-  .btn,
-  .tab-btn,
-  .filter-btn {
-    min-height: 44px;
-  }
-}
-
-/* ✅ 4. Table → cartes verticales sur mobile */
-@media (max-width: 600px) {
-  .table-head {
-    display: none;
-  }
-
-  .trow {
-    grid-template-columns: 1fr !important;
-    gap: .4rem;
-  }
-
-  .trow > div {
-    padding: .1rem 0;
-  }
-
-  .cell-actions {
-    justify-content: flex-start;
-    margin-top: .4rem;
-  }
-}
-
-/* ✅ 5. Supprimer les hauteurs bloquantes */
-@media (max-width: 800px) {
-  .list-view,
-  .list-content,
-  .cal-view {
-    min-height: auto;
-    max-height: none;
-  }
-}
-
-/* ✅ 6. Modales plein écran sur mobile */
-@media (max-width: 600px) {
-  .overlay {
-    padding: 0;
-  }
-
-  .modal {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    border-radius: 0;
-  }
-
-  .modal-ft {
-    position: sticky;
-    bottom: 0;
-    background: var(--surface);
-  }
-}
-  
 </style>
 </head>
 <body>
 
 <!-- ══ TOPBAR ══════════════════════════════════════════════════ -->
 <div class="topbar">
-  <div class="logo"><div class="logo-pulse"></div>TravelDesk</div>
+  <div class="logo"><div class="logo-pulse"></div>Matsport Travel</div>
   <div class="topbar-center">
     <button class="tab-btn active" onclick="switchView('list',this)">📋 Liste</button>
     <button class="tab-btn" onclick="switchView('calendar',this)">📅 Calendrier</button>
@@ -301,8 +264,8 @@ html, body {
           <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> (30 sec) puis collez votre clé API et Bin ID ci-dessous. Tous ceux qui partagent ce fichier HTML verront les données en temps réel.
         </div>
         <div class="setup-input-row">
-          <input class="setup-input" id="apiKeyInput" placeholder="$2a$10$7YuJVYBBewmCU2r/L//qa.gaz/WTWR.p2sHy9jRUkOCq652Z/FcYS">
-          <input class="setup-input" id="binIdInput" placeholder="69e8cec9856a6821895ef034">
+          <input class="setup-input" id="apiKeyInput" placeholder="Clé API JSONBin (X-Master-Key)">
+          <input class="setup-input" id="binIdInput" placeholder="Bin ID (ex: 6642a...)">
           <button class="btn btn-primary" onclick="saveNetworkConfig()">Connecter</button>
           <button class="btn btn-ghost" onclick="dismissBanner()">Plus tard</button>
         </div>
@@ -324,6 +287,10 @@ html, body {
         <div style="position:relative">
           <span style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">🔍</span>
           <input type="text" id="searchInput" placeholder="Nom, ville…" oninput="renderTable()" style="padding-left:2rem;width:180px;font-size:.78rem">
+        </div>
+        <div style="position:relative">
+          <span style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">🎯</span>
+          <input type="text" id="prestationFilter" placeholder="Prestation…" oninput="renderTable()" style="padding-left:2rem;width:160px;font-size:.78rem">
         </div>
         <div class="filter-row">
           <button class="filter-btn active" onclick="setSort('date',this)">Date</button>
@@ -355,10 +322,10 @@ html, body {
       <button class="btn btn-ghost btn-sm" onclick="goToday()">Aujourd'hui</button>
     </div>
     <div class="cal-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Transport</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Logement</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Transport</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Logement</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Confirmé</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>En attente</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>En attente</div>
     </div>
   </div>
   <div class="cal-grid" id="calGrid"></div>
@@ -381,7 +348,17 @@ html, body {
         <button class="type-btn sel" id="btnTransport" onclick="selectType('transport')">✈️ Transport</button>
         <button class="type-btn" id="btnLogement" onclick="selectType('logement')">🏨 Logement</button>
       </div>
-      <div class="fg"><label>Collaborateur *</label><input id="f-name" placeholder="Prénom Nom"></div>
+
+      <!-- MULTI-COLLABORATEURS -->
+      <div class="fg full">
+        <label>Collaborateur(s) *</label>
+        <div id="tag-container" style="display:flex;flex-wrap:wrap;gap:.35rem;padding:.45rem .6rem;background:#fff;border:1px solid var(--border2);border-radius:6px;min-height:2.4rem;align-items:center;cursor:text" onclick="document.getElementById('f-name-input').focus()">
+          <div id="tag-list" style="display:flex;flex-wrap:wrap;gap:.3rem"></div>
+          <input id="f-name-input" placeholder="Ajouter un collaborateur…" style="border:none;outline:none;padding:.15rem .3rem;font-size:.82rem;min-width:160px;flex:1;background:transparent" onkeydown="handleTagInput(event)" oninput="this.style.width=Math.max(160,this.scrollWidth)+'px'">
+        </div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:.25rem">Appuyez sur Entrée ou virgule pour ajouter plusieurs personnes</div>
+      </div>
+
       <div class="fg"><label>Destination / Lieu *</label><input id="f-dest" placeholder="Paris, Berlin…"></div>
       <div class="fg full"><label>Prestation</label><input id="f-prestation" placeholder="Ex : formation, séminaire, client, conférence…"></div>
       <div class="fg"><label>Date départ / arrivée *</label><input id="f-date" type="date"></div>
@@ -399,6 +376,8 @@ html, body {
       </div>
       <div class="fg"><label>Montant (€)</label><input id="f-montant" type="number" placeholder="0.00" step="0.01"></div>
       <div class="fg full"><label>Notes</label><textarea id="f-notes" rows="2" placeholder="Infos, confirmation…"></textarea></div>
+
+
     </div>
     <div class="form-err" id="formErr"></div>
   </div>
@@ -439,8 +418,9 @@ let editingId = null;
 let formType = 'transport';
 let calYear, calMonth;
 let detailId = null;
-let netConfig = null; // {apiKey, binId}
+let netConfig = null;
 let autoSyncInterval = null;
+let formTags = []; // collaborateurs en cours de saisie
 
 // ════════════════════════════════════════════════════════════════
 // NETWORK CONFIG
@@ -543,13 +523,12 @@ function sampleData() {
   const t = new Date(); const fmt = d=>d.toISOString().split('T')[0];
   const add = (d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return fmt(x)};
   return [
-    {id:'s1',type:'transport',name:'Marie Dupont',dest:'Lyon',prestation:'Formation interne',date:add(t,3),dateEnd:add(t,3),comp:'SNCF',ref:'TGV-4521',status:'confirmé',montant:89,notes:'Départ 08h12 Paris Gare de Lyon'},
-    {id:'s2',type:'logement',name:'Marie Dupont',dest:'Lyon',prestation:'Formation interne',date:add(t,3),dateEnd:add(t,5),hotel:'Novotel Lyon',adr:'Rue Garibaldi',status:'confirmé',montant:210,notes:'Chambre double, petit-déj inclus'},
-    {id:'s3',type:'transport',name:'Thomas Bernard',dest:'Bordeaux',prestation:'Rendez-vous client',date:add(t,7),dateEnd:add(t,7),comp:'Air France',ref:'AF8842',status:'en attente',montant:145,notes:''},
-    {id:'s4',type:'logement',name:'Sophie Martin',dest:'Berlin',prestation:'Conférence annuelle',date:add(t,14),dateEnd:add(t,17),hotel:'Radisson Berlin',adr:'Karl-Liebknecht-Str.',status:'confirmé',montant:380,notes:'Conférence annuelle'},
-    {id:'s5',type:'transport',name:'Sophie Martin',dest:'Berlin',prestation:'Conférence annuelle',date:add(t,14),dateEnd:add(t,14),comp:'Lufthansa',ref:'LH1234',status:'confirmé',montant:210,notes:'Vol direct CDG → BER'},
-    {id:'s6',type:'transport',name:'Lucas Moreau',dest:'Toulouse',prestation:'Séminaire équipe',date:add(t,21),dateEnd:add(t,21),comp:'TGV',ref:'TGV-8810',status:'en attente',montant:72,notes:''},
-    {id:'s7',type:'logement',name:'Lucas Moreau',dest:'Toulouse',prestation:'Séminaire équipe',date:add(t,21),dateEnd:add(t,23),hotel:'Ibis Toulouse',adr:'Pl. du Capitole',status:'en attente',montant:160,notes:''},
+    {id:'s1',type:'transport',names:['Marie Dupont'],dest:'Lyon',prestation:'Formation interne',date:add(t,3),dateEnd:add(t,3),comp:'SNCF',ref:'TGV-4521',status:'confirmé',montant:89,notes:'Départ 08h12 Paris Gare de Lyon',docs:[]},
+    {id:'s2',type:'logement',names:['Marie Dupont'],dest:'Lyon',prestation:'Formation interne',date:add(t,3),dateEnd:add(t,5),hotel:'Novotel Lyon',adr:'Rue Garibaldi',status:'confirmé',montant:210,notes:'Chambre double, petit-déj inclus',docs:[]},
+    {id:'s3',type:'transport',names:['Thomas Bernard','Lucas Moreau'],dest:'Bordeaux',prestation:'Rendez-vous client',date:add(t,7),dateEnd:add(t,7),comp:'Air France',ref:'AF8842',status:'en attente',montant:290,notes:'',docs:[]},
+    {id:'s4',type:'logement',names:['Sophie Martin'],dest:'Berlin',prestation:'Conférence annuelle',date:add(t,14),dateEnd:add(t,17),hotel:'Radisson Berlin',adr:'Karl-Liebknecht-Str.',status:'confirmé',montant:380,notes:'Conférence annuelle',docs:[]},
+    {id:'s5',type:'transport',names:['Sophie Martin'],dest:'Berlin',prestation:'Conférence annuelle',date:add(t,14),dateEnd:add(t,14),comp:'Lufthansa',ref:'LH1234',status:'confirmé',montant:210,notes:'Vol direct CDG → BER',docs:[]},
+    {id:'s6',type:'logement',names:['Lucas Moreau'],dest:'Toulouse',prestation:'Séminaire équipe',date:add(t,21),dateEnd:add(t,23),hotel:'Ibis Toulouse',adr:'Pl. du Capitole',status:'en attente',montant:160,notes:'',docs:[]},
   ];
 }
 
@@ -597,21 +576,24 @@ function updateStats() {
   document.getElementById('s-total').textContent = reservations.length;
   document.getElementById('s-confirmed').textContent = reservations.filter(r=>r.status==='confirmé').length;
   document.getElementById('s-pending').textContent = reservations.filter(r=>r.status==='en attente').length;
-  document.getElementById('s-people').textContent = new Set(reservations.map(r=>r.name)).size;
+  const people = new Set(reservations.flatMap(r=>r.names||[r.name||'']));
+  document.getElementById('s-people').textContent = people.size;
 }
 
 function getFiltered() {
   const q = (document.getElementById('searchInput')||{}).value?.toLowerCase()||'';
+  const qp = (document.getElementById('prestationFilter')||{}).value?.toLowerCase()||'';
   return reservations
     .filter(r=>{
       if(filter==='all') return true;
       if(filter==='transport'||filter==='logement') return r.type===filter;
       return r.status===filter;
     })
-    .filter(r=>!q||(r.name||'').toLowerCase().includes(q)||(r.dest||'').toLowerCase().includes(q))
+    .filter(r=>!q||(r.names||[r.name||'']).some(n=>n.toLowerCase().includes(q))||(r.dest||'').toLowerCase().includes(q))
+    .filter(r=>!qp||(r.prestation||'').toLowerCase().includes(qp))
     .sort((a,b)=>{
       if(sort==='date') return (a.date||'')>(b.date||'')?1:-1;
-      if(sort==='name') return (a.name||'').localeCompare(b.name||'');
+      if(sort==='name') return (a.names&&a.names[0]||a.name||'').localeCompare(b.names&&b.names[0]||b.name||'');
       if(sort==='type') return (a.type||'').localeCompare(b.type||'');
       return 0;
     });
@@ -624,14 +606,15 @@ function renderTable() {
     body.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Aucune réservation</div></div>';return;
   }
   body.innerHTML = data.map(r=>{
+    const names = r.names || [r.name||''];
     const statusChip = {
       'confirmé':'<span class="chip chip-green">✅ Confirmé</span>',
       'en attente':'<span class="chip chip-orange">🟡 En attente</span>',
       'annulé':'<span class="chip chip-red">❌ Annulé</span>',
     }[r.status]||r.status;
     const typeChip = r.type==='transport'
-      ?'<span class="chip chip-blue">✈️ Transport</span>'
-      :'<span class="chip chip-purple">🏨 Logement</span>';
+      ?'<span class="chip chip-orange">✈️ Transport</span>'
+      :'<span class="chip chip-blue">🏨 Logement</span>';
     const detail = r.type==='transport'
       ?`<div class="cell-sub">${r.comp||''}${r.ref?' · '+r.ref:''}</div>`
       :`<div class="cell-sub">${r.hotel||''}</div>`;
@@ -639,8 +622,9 @@ function renderTable() {
       ?`${fmtDate(r.date)}<span style="font-size:.65rem;display:block;color:var(--muted)">→ ${fmtDate(r.dateEnd)}</span>`
       :fmtDate(r.date);
     const prestation = r.prestation ? `<span style="font-size:.78rem;color:var(--text)">${esc(r.prestation)}</span>` : `<span style="color:var(--muted2);font-size:.75rem">—</span>`;
+    const nameTags = names.map(n=>`<span style="display:inline-flex;align-items:center;background:var(--blue-dim);color:#1d4ed8;border-radius:3px;padding:.1rem .4rem;font-size:.68rem;font-weight:500;white-space:nowrap;margin:.1rem">${esc(n)}</span>`).join('');
     return `<div class="trow" style="grid-template-columns:1.8fr 1.2fr 1.2fr 1.1fr 1fr 1fr auto">
-      <div><div class="cell-name">${esc(r.name)}</div>${detail}</div>
+      <div><div style="display:flex;flex-wrap:wrap;gap:.15rem;margin-bottom:.15rem">${nameTags}</div>${detail}</div>
       <div class="cell-muted">${esc(r.dest)}</div>
       <div>${prestation}</div>
       <div class="cell-muted">${dates}</div>
@@ -697,7 +681,9 @@ function renderCalendar() {
 
     const evHTML = shown.map(r=>{
       const icon = r.type==='transport'?'✈️':'🏨';
-      return `<div class="cal-event ${r.type}" onclick="openDetail('${r.id}')" title="${esc(r.name)} — ${esc(r.dest)}">${icon} ${esc(r.name.split(' ')[0])}</div>`;
+      const names = r.names||[r.name||''];
+      const label = names.length > 1 ? names[0].split(' ')[0]+' +'+( names.length-1) : names[0].split(' ')[0];
+      return `<div class="cal-event ${r.type}" onclick="openDetail('${r.id}')" title="${esc(names.join(', '))} — ${esc(r.dest)}">${icon} ${esc(label)}</div>`;
     }).join('');
 
     const extraHTML = extra>0 ? `<div class="more-events">+${extra} autre${extra>1?'s':''}</div>` : '';
@@ -761,10 +747,13 @@ function openDetail(id) {
   const r = reservations.find(x=>x.id===id);
   if(!r) return;
   detailId = id;
-  document.getElementById('detailTitle').textContent = r.name;
+  const names = r.names||[r.name||''];
+  document.getElementById('detailTitle').textContent = names.join(', ');
   document.getElementById('detailSub').textContent = (r.type==='transport'?'✈️ Transport':'🏨 Logement')+' — '+r.dest;
   const rows = [
+    ['Collaborateur(s)', names.join(', ')],
     ['Destination', r.dest],
+    r.prestation?['Prestation', r.prestation]:null,
     ['Date départ', fmtDate(r.date)],
     r.dateEnd&&r.dateEnd!==r.date?['Date retour/fin', fmtDate(r.dateEnd)]:null,
     r.type==='transport'?['Compagnie', r.comp||'—']:['Établissement', r.hotel||'—'],
@@ -773,34 +762,61 @@ function openDetail(id) {
     r.montant?['Montant', r.montant+' €']:null,
     r.notes?['Notes', r.notes]:null,
   ].filter(Boolean);
-  document.getElementById('detailBody').innerHTML = rows.map(([l,v])=>
-    `<div class="detail-row"><div class="detail-label">${l}</div><div class="detail-value">${esc(v)}</div></div>`
-  ).join('');
+
+  document.getElementById('detailBody').innerHTML =
+    rows.map(([l,v])=>`<div class="detail-row"><div class="detail-label">${l}</div><div class="detail-value">${esc(String(v))}</div></div>`).join('');
   document.getElementById('detailOverlay').classList.add('open');
 }
 
-function editFromDetail() { closeModal('detailOverlay'); openModal(detailId); }
+function editFromDetail() {
+  const id = detailId;
+  closeModal('detailOverlay');
+  setTimeout(() => openModal(id), 50);
+}
 function deleteFromDetail() { closeModal('detailOverlay'); deleteReservation(detailId); }
 
 // ════════════════════════════════════════════════════════════════
 // FORM MODAL
 // ════════════════════════════════════════════════════════════════
+function setField(id, val) {
+  const el = document.getElementById(id);
+  if(el) el.value = val || '';
+}
+
 function openModal(id=null) {
-  editingId = id;
+  editingId = id || null;
   document.getElementById('formErr').style.display='none';
-  if(id) {
-    const r = reservations.find(x=>x.id===id);
-    if(!r) return;
+  formTags = [];
+
+  if(editingId) {
+    const r = reservations.find(x=>x.id===editingId);
+    if(!r){ console.warn('Réservation introuvable:', editingId); return; }
     document.getElementById('modalTitle').textContent = 'Modifier la réservation';
     selectType(r.type);
-    setField('f-name',r.name);setField('f-dest',r.dest);setField('f-date',r.date);setField('f-date-end',r.dateEnd||'');
-    setField('f-comp',r.comp||'');setField('f-ref',r.ref||'');setField('f-hotel',r.hotel||'');setField('f-adr',r.adr||'');
-    document.getElementById('f-status').value=r.status||'en attente';
-    setField('f-montant',r.montant||'');setField('f-notes',r.notes||'');
+    formTags = [...(r.names||[r.name||''].filter(Boolean))];
+    setField('f-dest', r.dest);
+    setField('f-prestation', r.prestation||'');
+    setField('f-date', r.date);
+    setField('f-date-end', r.dateEnd||'');
+    setField('f-comp', r.comp||'');
+    setField('f-ref', r.ref||'');
+    setField('f-hotel', r.hotel||'');
+    setField('f-adr', r.adr||'');
+    document.getElementById('f-status').value = r.status||'en attente';
+    setField('f-montant', r.montant||'');
+    setField('f-notes', r.notes||'');
   } else {
     document.getElementById('modalTitle').textContent = 'Nouvelle réservation';
-    clearForm(); selectType('transport');
+    clearForm();
+    selectType('transport');
   }
+
+  renderTags();
+
+  // Clear name input field
+  const nameInp = document.getElementById('f-name-input');
+  if(nameInp) nameInp.value = '';
+
   document.getElementById('formOverlay').classList.add('open');
 }
 
@@ -815,43 +831,91 @@ function selectType(t) {
 }
 
 function clearForm() {
-  ['f-name','f-dest','f-date','f-date-end','f-comp','f-ref','f-hotel','f-adr','f-notes'].forEach(id=>{
+  formTags=[];
+  ['f-dest','f-prestation','f-date','f-date-end','f-comp','f-ref','f-hotel','f-adr','f-notes'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
+  const inp=document.getElementById('f-name-input');if(inp)inp.value='';
   document.getElementById('f-status').value='en attente';
   document.getElementById('f-montant').value='';
+  renderTags();
 }
 
-function setField(id,val){const el=document.getElementById(id);if(el)el.value=val||'';}
+// ── TAG SYSTEM ────────────────────────────────────────────────
+function renderTags() {
+  const list = document.getElementById('tag-list');
+  if(!list) return;
+  list.innerHTML = formTags.map((t,i)=>
+    `<span class="collab-tag">${esc(t)}<button onclick="removeTag(${i})" type="button">×</button></span>`
+  ).join('');
+}
+
+function removeTag(i) {
+  formTags.splice(i,1);
+  renderTags();
+}
+
+function handleTagInput(e) {
+  const inp = e.target;
+  if(e.key==='Enter'||e.key===','||e.key===';') {
+    e.preventDefault();
+    addTagFromInput(inp);
+  } else if(e.key==='Backspace' && inp.value==='' && formTags.length) {
+    formTags.pop(); renderTags();
+  }
+}
+
+function addTagFromInput(inp) {
+  const val = (inp.value||'').replace(/,|;/g,'').trim();
+  if(val && !formTags.includes(val)) { formTags.push(val); renderTags(); }
+  inp.value='';
+}
+
 
 async function saveReservation() {
-  const name=document.getElementById('f-name').value.trim();
-  const dest=document.getElementById('f-dest').value.trim();
-  const date=document.getElementById('f-date').value;
-  const err=document.getElementById('formErr');
-  if(!name||!dest||!date){err.textContent='Veuillez remplir les champs obligatoires (*)';err.style.display='block';return;}
+  // flush any pending tag input
+  const nameInp = document.getElementById('f-name-input');
+  if(nameInp && nameInp.value.trim()) addTagFromInput(nameInp);
+
+  const dest = document.getElementById('f-dest').value.trim();
+  const date = document.getElementById('f-date').value;
+  const err = document.getElementById('formErr');
+
+  if(!formTags.length || !dest || !date) {
+    err.textContent = 'Veuillez renseigner au moins un collaborateur, une destination et une date (*)';
+    err.style.display = 'block';
+    return;
+  }
 
   const rec = {
-    id: editingId||'r'+Date.now(),
-    type: formType, name, dest, date,
+    id: editingId || 'r'+Date.now(),
+    type: formType,
+    names: [...formTags],
+    dest, date,
     prestation: document.getElementById('f-prestation').value,
-    dateEnd: document.getElementById('f-date-end').value||date,
+    dateEnd: document.getElementById('f-date-end').value || date,
     comp: document.getElementById('f-comp').value,
     ref: document.getElementById('f-ref').value,
     hotel: document.getElementById('f-hotel').value,
     adr: document.getElementById('f-adr').value,
     status: document.getElementById('f-status').value,
-    montant: parseFloat(document.getElementById('f-montant').value)||0,
+    montant: parseFloat(document.getElementById('f-montant').value) || 0,
     notes: document.getElementById('f-notes').value,
   };
 
-  if(editingId){const i=reservations.findIndex(r=>r.id===editingId);if(i>-1)reservations[i]=rec;}
-  else reservations.unshift(rec);
+  if(editingId) {
+    const i = reservations.findIndex(r=>r.id===editingId);
+    if(i > -1) reservations[i] = rec;
+    else reservations.unshift(rec);
+  } else {
+    reservations.unshift(rec);
+  }
 
+  // Close first, then save & render
+  closeModal('formOverlay');
   saveLocal();
   if(netConfig) await pushToNet();
   render();
-  closeModal('formOverlay');
 }
 
 async function deleteReservation(id) {
@@ -872,9 +936,12 @@ function fmtDate(s){
 }
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// Close overlays on outside click
-['formOverlay','detailOverlay'].forEach(id=>{
-  document.getElementById(id).addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal(id);});
+// Close overlays on outside click — use mousedown to avoid conflict with inner clicks
+['formOverlay','detailOverlay'].forEach(overlayId=>{
+  const el = document.getElementById(overlayId);
+  el.addEventListener('mousedown', e=>{
+    if(e.target === el) closeModal(overlayId);
+  });
 });
 
 // ════════════════════════════════════════════════════════════════
