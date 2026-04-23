@@ -155,64 +155,126 @@ select option{background:#fff}
 .detail-label{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-width:90px;flex-shrink:0;padding-top:.1rem}
 .detail-value{font-size:.82rem;line-height:1.5}
 
+/* ── MOBILE FILTER BAR (remplace la sidebar sur mobile) ── */
+.mobile-filter-bar{display:none}
+.mobile-row-sub{display:none}
+
 @media(max-width:800px){
-  /* Layout */
-  .list-view{grid-template-columns:1fr}
+  /* ── Layout de base ── */
+  .list-view{grid-template-columns:1fr;display:flex;flex-direction:column}
   .sidebar{display:none}
-  .stats-row{grid-template-columns:1fr 1fr}
-  .form-grid{grid-template-columns:1fr}
-  .fg.full{grid-column:1/-1}
+  .list-content{padding:.75rem;max-height:none;overflow-y:visible}
 
-  /* Topbar */
-  .topbar{padding:.6rem 1rem;flex-wrap:wrap;gap:.5rem}
-  .topbar-center{order:3;width:100%}
-  .tab-btn{flex:1;justify-content:center;padding:.5rem}
-  .topbar-right{gap:.4rem}
-  .sync-indicator span{display:none}
-  .btn-primary{font-size:.72rem;padding:.4rem .7rem}
+  /* ── Topbar ── */
+  .topbar{padding:.55rem .75rem;gap:.4rem}
+  .topbar-center{flex:1;justify-content:center}
+  .tab-btn{flex:1;justify-content:center;padding:.45rem .5rem;font-size:.75rem}
+  .topbar-right{gap:.35rem;flex-shrink:0}
+  .sync-indicator{display:none}
+  .btn-primary{font-size:.72rem;padding:.4rem .65rem}
+  .btn-ghost.btn-sm{padding:.35rem .5rem}
 
-  /* Table responsive */
-  .table-head{grid-template-columns:1.5fr 1fr auto!important;padding:.5rem .75rem}
-  .trow{grid-template-columns:1.5fr 1fr auto!important;padding:.6rem .75rem}
-  .trow > *:nth-child(3),.trow > *:nth-child(4),.trow > *:nth-child(5),
-  .table-head > *:nth-child(3),.table-head > *:nth-child(4),.table-head > *:nth-child(5){display:none}
+  /* ── Barre de filtres mobile (remplace sidebar) ── */
+  .mobile-filter-bar{
+    display:flex;
+    overflow-x:auto;
+    gap:.4rem;
+    padding:.6rem .75rem;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .mobile-filter-bar::-webkit-scrollbar{display:none}
+  .mobile-filter-chip{
+    display:inline-flex;align-items:center;gap:.3rem;
+    padding:.32rem .7rem;border-radius:20px;font-size:.72rem;
+    font-family:inherit;cursor:pointer;border:1px solid var(--border2);
+    background:var(--surface);color:var(--muted);
+    white-space:nowrap;flex-shrink:0;transition:all .15s;
+  }
+  .mobile-filter-chip.active{background:var(--blue-dim);color:#1d4ed8;border-color:var(--blue)}
+  .mobile-filter-chip .mfc-badge{
+    background:var(--surface2);color:var(--muted);
+    font-size:.6rem;padding:.1rem .35rem;border-radius:8px;min-width:1.2rem;text-align:center;
+  }
+  .mobile-filter-chip.active .mfc-badge{background:rgba(37,99,235,.15);color:#1d4ed8}
 
-  /* Section bar */
-  .section-bar{flex-direction:column;align-items:flex-start;gap:.6rem}
-  .section-bar > div:last-child{width:100%;flex-direction:column}
-  #searchInput{width:100%!important}
-  .filter-row{width:100%;justify-content:flex-start}
+  /* ── Stats ── */
+  .stats-row{grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem}
+  .stat-card{padding:.7rem .9rem}
+  .stat-value{font-size:1.35rem}
+  .stat-label{font-size:.6rem}
+  .stat-sub{font-size:.62rem}
 
-  /* Calendar */
-  .cal-cell{min-height:60px;padding:.3rem}
-  .cal-event{font-size:.56rem;padding:.15rem .3rem}
-  .cal-header{flex-direction:column;align-items:flex-start}
-  .cal-legend{gap:.6rem}
+  /* ── Section bar & filtres ── */
+  .section-bar{flex-direction:column;align-items:stretch;gap:.5rem;margin-bottom:.75rem}
+  .section-title{font-size:.88rem}
+  .section-bar > div:last-child{
+    display:flex;flex-direction:column;gap:.45rem;width:100%
+  }
+  .search-inputs-row{display:flex;gap:.4rem;width:100%}
+  .search-inputs-row > div{flex:1;min-width:0}
+  #searchInput,#prestationFilter{width:100%!important;font-size:.8rem}
+  .filter-row{gap:.35rem}
+  .filter-btn{font-size:.68rem;padding:.25rem .6rem}
 
-  /* Modal */
-  .modal{max-height:95vh;border-radius:14px 14px 0 0;margin-top:auto}
+  /* ── Table ── */
+  .table-wrap{border-radius:8px}
+  .table-head{grid-template-columns:1fr auto!important;padding:.45rem .75rem;font-size:.6rem}
+  .trow{grid-template-columns:1fr auto!important;padding:.65rem .75rem;gap:.4rem}
+  /* Cacher toutes colonnes sauf la 1ère (nom+infos) et la dernière (actions) */
+  .trow > *:nth-child(2),
+  .trow > *:nth-child(3),
+  .trow > *:nth-child(4),
+  .trow > *:nth-child(5),
+  .trow > *:nth-child(6),
+  .table-head > *:nth-child(2),
+  .table-head > *:nth-child(3),
+  .table-head > *:nth-child(4),
+  .table-head > *:nth-child(5),
+  .table-head > *:nth-child(6){display:none}
+  /* Sous-infos visibles uniquement sur mobile */
+  .mobile-row-sub{display:flex!important}
+
+  /* Première colonne : enrichie avec sous-infos */
+  .trow > *:nth-child(1){overflow:hidden}
+  .cell-actions{gap:.25rem}
+  .btn-icon{padding:.38rem .42rem;font-size:.78rem}
+
+  /* ── Calendrier ── */
+  .cal-view{padding:.75rem;max-height:none}
+  .cal-cell{min-height:55px;padding:.25rem}
+  .cal-event{font-size:.54rem;padding:.12rem .25rem}
+  .cal-day-name{font-size:.58rem;padding:.35rem .2rem}
+  .cal-header{flex-direction:column;gap:.5rem}
+  .cal-legend{gap:.5rem;flex-wrap:wrap}
+  .legend-item{font-size:.65rem}
+  .cal-month{font-size:1rem;min-width:auto}
+
+  /* ── Modal ── */
   .overlay{align-items:flex-end;padding:0}
-  .modal-bd{padding:1rem}
-  .modal-hd{padding:1rem 1rem .8rem}
-  .modal-ft{padding:.8rem 1rem;gap:.5rem}
-  .modal-ft .btn{flex:1;text-align:center}
+  .modal{max-height:92vh;border-radius:16px 16px 0 0;margin-top:auto;max-width:100%}
+  @keyframes modalIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .modal-bd{padding:.9rem 1rem}
+  .modal-hd{padding:.9rem 1rem .75rem}
+  .modal-ft{padding:.75rem 1rem;gap:.45rem}
+  .modal-ft .btn{flex:1;justify-content:center;text-align:center}
+  .form-grid{grid-template-columns:1fr;gap:.7rem}
+  .fg.full{grid-column:1/-1}
   .type-toggle{gap:.4rem}
-  .type-btn{padding:.55rem .4rem;font-size:.75rem}
-
-  /* Stats */
-  .stat-card{padding:.8rem 1rem}
-  .stat-value{font-size:1.4rem}
-  .list-content{padding:1rem}
-  .stats-row{gap:.6rem;margin-bottom:1rem}
+  .type-btn{padding:.6rem .3rem;font-size:.78rem}
+  input,select,textarea{font-size:16px!important} /* évite le zoom iOS */
 }
 
 @media(max-width:420px){
-  .stats-row{grid-template-columns:1fr 1fr}
-  .stat-card{padding:.65rem .8rem}
-  .stat-value{font-size:1.25rem}
-  .topbar .logo{font-size:.9rem}
-  .cell-actions{gap:.2rem}
-  .btn-icon{padding:.35rem .4rem;font-size:.75rem}
+  .topbar{padding:.5rem .6rem}
+  .logo{font-size:.88rem}
+  .stats-row{gap:.4rem}
+  .stat-card{padding:.6rem .7rem}
+  .stat-value{font-size:1.2rem}
+  .list-content{padding:.6rem}
+  .mobile-filter-bar{padding:.5rem .6rem}
 }
 </style>
 </head>
@@ -230,6 +292,16 @@ select option{background:#fff}
     <button class="btn btn-ghost btn-sm" onclick="syncNow()" title="Synchroniser">⟳</button>
     <button class="btn btn-primary" onclick="openModal()">+ Réservation</button>
   </div>
+</div>
+
+<!-- ══ MOBILE FILTER BAR ══════════════════════════════════════ -->
+<div class="mobile-filter-bar" id="mobileFilterBar">
+  <button class="mobile-filter-chip active" onclick="setFilter('all',this)" data-filter="all">📋 Toutes <span class="mfc-badge" id="mcnt-all">0</span></button>
+  <button class="mobile-filter-chip" onclick="setFilter('transport',this)" data-filter="transport">✈️ Transport <span class="mfc-badge" id="mcnt-transport">0</span></button>
+  <button class="mobile-filter-chip" onclick="setFilter('logement',this)" data-filter="logement">🏨 Logement <span class="mfc-badge" id="mcnt-logement">0</span></button>
+  <button class="mobile-filter-chip" onclick="setFilter('confirmé',this)" data-filter="confirmé">✅ Confirmées <span class="mfc-badge" id="mcnt-confirmé">0</span></button>
+  <button class="mobile-filter-chip" onclick="setFilter('en attente',this)" data-filter="en attente">🟡 En attente <span class="mfc-badge" id="mcnt-en attente">0</span></button>
+  <button class="mobile-filter-chip" onclick="setFilter('annulé',this)" data-filter="annulé">❌ Annulées <span class="mfc-badge" id="mcnt-annulé">0</span></button>
 </div>
 
 <!-- ══ LIST VIEW ══════════════════════════════════════════════ -->
@@ -284,13 +356,15 @@ select option{background:#fff}
     <div class="section-bar">
       <div class="section-title" id="viewTitle">Toutes les réservations</div>
       <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-        <div style="position:relative">
-          <span style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">🔍</span>
-          <input type="text" id="searchInput" placeholder="Nom, ville…" oninput="renderTable()" style="padding-left:2rem;width:180px;font-size:.78rem">
-        </div>
-        <div style="position:relative">
-          <span style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">🎯</span>
-          <input type="text" id="prestationFilter" placeholder="Prestation…" oninput="renderTable()" style="padding-left:2rem;width:160px;font-size:.78rem">
+        <div class="search-inputs-row">
+          <div style="position:relative">
+            <span style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">🔍</span>
+            <input type="text" id="searchInput" placeholder="Nom, ville…" oninput="renderTable()" style="padding-left:2rem;width:180px;font-size:.78rem">
+          </div>
+          <div style="position:relative">
+            <span style="position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.8rem">🎯</span>
+            <input type="text" id="prestationFilter" placeholder="Prestation…" oninput="renderTable()" style="padding-left:2rem;width:160px;font-size:.78rem">
+          </div>
         </div>
         <div class="filter-row">
           <button class="filter-btn active" onclick="setSort('date',this)">Date</button>
@@ -569,7 +643,10 @@ function updateCounts() {
   const map = {all:reservations.length};
   ['transport','logement'].forEach(t=>map[t]=reservations.filter(r=>r.type===t).length);
   ['confirmé','en attente','annulé'].forEach(s=>map[s]=reservations.filter(r=>r.status===s).length);
-  Object.entries(map).forEach(([k,v])=>{const el=document.getElementById('cnt-'+k);if(el)el.textContent=v;});
+  Object.entries(map).forEach(([k,v])=>{
+    const el=document.getElementById('cnt-'+k); if(el) el.textContent=v;
+    const mel=document.getElementById('mcnt-'+k); if(mel) mel.textContent=v;
+  });
 }
 
 function updateStats() {
@@ -624,7 +701,15 @@ function renderTable() {
     const prestation = r.prestation ? `<span style="font-size:.78rem;color:var(--text)">${esc(r.prestation)}</span>` : `<span style="color:var(--muted2);font-size:.75rem">—</span>`;
     const nameTags = names.map(n=>`<span style="display:inline-flex;align-items:center;background:var(--blue-dim);color:#1d4ed8;border-radius:3px;padding:.1rem .4rem;font-size:.68rem;font-weight:500;white-space:nowrap;margin:.1rem">${esc(n)}</span>`).join('');
     return `<div class="trow" style="grid-template-columns:1.8fr 1.2fr 1.2fr 1.1fr 1fr 1fr auto">
-      <div><div style="display:flex;flex-wrap:wrap;gap:.15rem;margin-bottom:.15rem">${nameTags}</div>${detail}</div>
+      <div>
+        <div style="display:flex;flex-wrap:wrap;gap:.15rem;margin-bottom:.15rem">${nameTags}</div>
+        ${detail}
+        <div class="mobile-row-sub" style="margin-top:.25rem;display:flex;flex-wrap:wrap;gap:.3rem;align-items:center">
+          <span style="font-size:.68rem;color:var(--muted)">${esc(r.dest)}</span>
+          ${r.prestation?`<span style="font-size:.65rem;color:var(--muted2)">· ${esc(r.prestation)}</span>`:''}
+          ${statusChip}
+        </div>
+      </div>
       <div class="cell-muted">${esc(r.dest)}</div>
       <div>${prestation}</div>
       <div class="cell-muted">${dates}</div>
@@ -726,8 +811,17 @@ function switchView(name, el) {
 
 function setFilter(f, el) {
   filter = f;
+  // Sidebar desktop
   document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if(el && el.classList.contains('sidebar-item')) el.classList.add('active');
+  // Chips mobile
+  document.querySelectorAll('.mobile-filter-chip').forEach(i=>i.classList.remove('active'));
+  const chip = document.querySelector(`.mobile-filter-chip[data-filter="${CSS.escape(f)}"]`);
+  if(chip) chip.classList.add('active');
+  // Sync sidebar active state from desktop clicks
+  const sidebarMatch = document.querySelector(`.sidebar-item[onclick*="'${f}'"]`);
+  if(sidebarMatch) sidebarMatch.classList.add('active');
+
   const titles={all:'Toutes les réservations',transport:'Transport',logement:'Logement','confirmé':'Confirmées','en attente':'En attente','annulé':'Annulées'};
   document.getElementById('viewTitle').textContent = titles[f]||f;
   renderTable();
